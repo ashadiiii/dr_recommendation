@@ -9,6 +9,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import PassiveAggressiveClassifier
 from sklearn import metrics
 import matplotlib as plt
+import streamlit as st
+import  pickle
 
 pd.set_option('display.max_rows',None)
 
@@ -91,10 +93,15 @@ print(pred)
 #creating the drug recommendation function
 def top_drugs_extractor(condition,df):
     df_top = df[(df['rating']>=9) & (df['usefulCount']>= 100)].sort_values(by =['rating','usefulCount'],ascending=[False,False])
-    drug_lst = df_top[df_top['condition']== condition]['drugName'].head(3).tolist()
+    drug_lst = df_top[df_top['condition']==condition]['drugName'].head(3).tolist()
     return drug_lst
 
 #experimenting the function
 drugs = top_drugs_extractor('Depression',df)
 print(drugs)
 
+with open('vectorizer/trained_vect.sav', 'wb') as f:
+    pickle.dump(tfidf_vectorizer, f)
+
+with open('model/trained_model.sav', 'wb') as f:
+    pickle.dump(pass_tf, f)
