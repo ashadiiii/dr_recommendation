@@ -1,3 +1,4 @@
+#importing necessary functions
 import pandas as pd
 import itertools
 import string
@@ -11,11 +12,14 @@ import matplotlib as plt
 
 pd.set_option('display.max_rows',None)
 
+#loading data
 df = pd.read_csv('data/drugsComTrain_raw.tsv',sep='\t')
 
+#restructuring the data
 df_train = df[(df['condition']=='Birth Control') | (df['condition']=='Depression') | (df['condition']=='High Blood Pressure') | (df['condition']=='Diabetes, Type 2')]
 x = df_train.drop(['Unnamed: 0','drugName','rating','date','usefulCount'],axis=1)
 
+#removing the inverted commas in the drug review data
 for i,col in enumerate(x.columns):
     x.iloc[:,i] = x.iloc[:,i].str.replace('"','')
 
@@ -24,32 +28,46 @@ pd.set_option('max_colwidth',None)
 import nltk
 #nltk.download()
 
+#loading stop words
 from nltk.corpus import stopwords
 stop = stopwords.words('english')
 
+#importing and creating a lemmetizer object
 from nltk.stem import WordNetLemmatizer
 lemmetizer = WordNetLemmatizer()
+
 
 from bs4 import BeautifulSoup
 import re
 
+#creating a cleaninng function
 def review_to_words(raw_review):
+    #removing html tags
     review_text = BeautifulSoup(raw_review,'html.parser').get_text()
+    #removing any punctuation
     letters_only = re.sub('[^a-zA-Z] ',' ',review_text)
+    #lowercasing and tokenising the data
     words = letters_only.lower().split()
+    #removing stop words
     meaningful_words=[w for w in words if not w in stop]
+    #lemmetizing each word to its base word
     lemmetized_words=[lemmetizer.lemmatize(w) for w in meaningful_words]
+    #re-combining the words to sentences
     cleaned_output = " ".join(lemmetized_words)
     return cleaned_output
 
+#applying the cleaning function to the drug reviews in the dataset
 x['review_clean'] = x['review'].apply(review_to_words)
 
+#creating the data and labels
 x_feat = x['review_clean']
 y = x['condition']
 
+#spliting the data to training and data set
 x_train,x_test,y_train,y_test = train_test_split(x_feat,y,stratify=y,test_size=0.2,random_state=0)
 
 from sklearn.feature_extraction.text import TfidfVectorizer
+
 
 tfidf_vectorizer = TfidfVectorizer(stop_words='english',max_df=0.8,ngram_range=(1,3))
 tfidf_train = tfidf_vectorizer.fit_transform(x_train)
