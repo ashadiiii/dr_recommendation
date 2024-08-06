@@ -100,6 +100,7 @@ def top_drugs_extractor(condition,df):
 drugs = top_drugs_extractor('Depression',df)
 print(drugs)
 
+#saves the passive-aggressive model and the vectorizer to the local machine
 with open('vectorizer/trained_vect.sav', 'wb') as f:
     pickle.dump(tfidf_vectorizer, f)
 
