@@ -104,5 +104,6 @@ print(drugs)
 with open('vectorizer/trained_vect.sav', 'wb') as f:
     pickle.dump(tfidf_vectorizer, f)
 
+#saving the vectorizer model
 with open('model/trained_model.sav', 'wb') as f:
     pickle.dump(pass_tf, f)
