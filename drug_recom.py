@@ -13,7 +13,6 @@ import streamlit as st
 import  pickle
 
 pd.set_option('display.max_rows',None)
-
 #loading data
 df = pd.read_csv('data/drugsComTrain_raw.tsv',sep='\t')
 
