@@ -3,10 +3,12 @@ import pickle
 from drug_recom import review_to_words,top_drugs_extractor
 import pandas as pd
 
+#retrieving the locations of the dataset, model and the vectorizer
 MODEL_PATH = 'model/trained_model.sav'
 TOKENISER_PATH = 'vectorizer/trained_vect.sav'
 DATA_PATH = 'data/drugsComTrain_raw.tsv'
 
+#loading the saved model
 model = pickle.load(open(MODEL_PATH,'rb'))
 
 with open(TOKENISER_PATH, 'rb') as f:
