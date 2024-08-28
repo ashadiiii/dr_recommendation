@@ -11,6 +11,7 @@ DATA_PATH = 'data/drugsComTrain_raw.tsv'
 #loading the saved model
 model = pickle.load(open(MODEL_PATH,'rb'))
 
+
 with open(TOKENISER_PATH, 'rb') as f:
     vectorizer = pickle.load(f)
 
